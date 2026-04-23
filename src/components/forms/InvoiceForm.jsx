@@ -82,32 +82,66 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
   const deleteItem = (index) =>
     setItems(items.filter((_, i) => i !== index));
 
+  // const handleSave = (status) => {
+  //   if (status !== "draft" && !validate()) return;
+
+  //   const id =
+  //     type === "edit"
+  //       ? initialData.id
+  //       : `RT${Date.now().toString().slice(-6)}`;
+
+  //   const finalInvoice = {
+  //     ...formData,
+  //     id,
+  //     status,
+  //     paymentDue: calculateDueDate(),
+  //     items,
+  //     total: items.reduce(
+  //       (acc, item) => acc + item.price * item.quantity,
+  //       0
+  //     ),
+  //   };
+
+  //   setInvoices((prev) =>
+  //     type === "edit"
+  //       ? prev.map((inv) => (inv.id === id ? finalInvoice : inv))
+  //       : [finalInvoice, ...prev]
+  //   );
+
+  //   onClose();
+  // };
+
   const handleSave = (status) => {
     if (status !== "draft" && !validate()) return;
-
+  
     const id =
       type === "edit"
         ? initialData.id
         : `RT${Date.now().toString().slice(-6)}`;
-
+  
     const finalInvoice = {
       ...formData,
       id,
       status,
-      paymentDue: calculateDueDate(),
-      items,
+      paymentDue: calculateDueDate() || "", 
+      items: items.map(item => ({
+        ...item,
+        quantity: Number(item.quantity) || 0,
+        price: Number(item.price) || 0,
+        total: (Number(item.quantity) || 0) * (Number(item.price) || 0)
+      })),
       total: items.reduce(
-        (acc, item) => acc + item.price * item.quantity,
+        (acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 0),
         0
       ),
     };
-
+  
     setInvoices((prev) =>
       type === "edit"
         ? prev.map((inv) => (inv.id === id ? finalInvoice : inv))
         : [finalInvoice, ...prev]
     );
-
+  
     onClose();
   };
 

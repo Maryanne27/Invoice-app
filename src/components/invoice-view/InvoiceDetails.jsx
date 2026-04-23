@@ -10,10 +10,10 @@ const InvoiceDetails = ({ invoice }) => {
           <p className="text-textSecondary dark:text-[#DFE3FA]">{invoice.description}</p>
         </div>
         <div className="text-textSecondary dark:text-[#DFE3FA] md:text-right text-sm">
-          <p>{invoice.senderAddress.street}</p>
-          <p>{invoice.senderAddress.city}</p>
-          <p>{invoice.senderAddress.postCode}</p>
-          <p>{invoice.senderAddress.country}</p>
+          <p>{invoice.senderAddress?.street}</p>
+          <p>{invoice.senderAddress?.city}</p>
+          <p>{invoice.senderAddress?.postCode}</p>
+          <p>{invoice.senderAddress?.country}</p>
         </div>
       </div>
 
@@ -34,10 +34,9 @@ const InvoiceDetails = ({ invoice }) => {
           <h3 className="label mb-3">Bill To</h3>
           <p className="text-lg font-bold dark:text-white mb-2">{invoice.clientName}</p>
           <div className="text-textSecondary dark:text-[#DFE3FA] text-sm">
-            <p>{invoice.clientAddress.street}</p>
-            <p>{invoice.clientAddress.city}</p>
-            <p>{invoice.clientAddress.postCode}</p>
-            <p>{invoice.clientAddress.country}</p>
+            <p>{invoice.clientAddress?.street}</p>
+            <p>{invoice.clientAddress?.city}</p>
+            <p>{invoice.clientAddress?.country}</p>
           </div>
         </div>
 
@@ -53,7 +52,7 @@ const InvoiceDetails = ({ invoice }) => {
           <thead className="hidden md:table-header-group">
             <tr className="text-textSecondary dark:text-[#DFE3FA] text-xs">
               <th className="pb-8 font-medium">Item Name</th>
-              <th className="pb-8 font-medium text-center">QTY.</th>
+              <th className="pb-8 font-medium text-center">Quantity</th>
               <th className="pb-8 font-medium text-right">Price</th>
               <th className="pb-8 font-medium text-right">Total</th>
             </tr>
@@ -63,8 +62,8 @@ const InvoiceDetails = ({ invoice }) => {
               <tr key={index} className="md:table-row flex flex-wrap justify-between items-center mb-6 md:mb-0">
                 <td className="md:py-4 font-bold dark:text-white w-full md:w-auto">{item.name}</td>
                 <td className="md:py-4 text-textSecondary dark:text-[#DFE3FA] font-bold text-center hidden md:table-cell">{item.quantity}</td>
-                <td className="md:py-4 text-textSecondary dark:text-[#DFE3FA] font-bold text-right hidden md:table-cell">£{item.price.toFixed(2)}</td>
-                <td className="md:py-4 font-bold dark:text-white text-right">£{item.total.toFixed(2)}</td>
+                <td className="md:py-4 text-textSecondary dark:text-[#DFE3FA] font-bold text-right hidden md:table-cell">£{item.price?.toFixed(2)}</td>
+                <td className="md:py-4 font-bold dark:text-white text-right">£{item.total?.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -74,7 +73,7 @@ const InvoiceDetails = ({ invoice }) => {
       {/* Total Bar (Dark Section) */}
       <div className="bg-[#373B53] dark:bg-[#0C0E16] text-white p-6 md:px-8 rounded-b-lg flex items-center justify-between">
         <span className="text-sm">Amount Due</span>
-        <span className="text-2xl font-bold">£{invoice.total.toFixed(2)}</span>
+        <span className="text-2xl font-bold">£{(invoice.total || 0).toFixed(2)}</span>
       </div>
     </div>
   );
