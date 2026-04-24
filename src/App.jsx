@@ -84,6 +84,7 @@ function App() {
                 element={
                   <InvoiceView
                     invoices={invoices}
+                    setInvoices={setInvoices}
                     onEdit={handleEdit}
                     onDelete={(inv) => {
                       setSelectedInvoice(inv);
@@ -102,7 +103,7 @@ function App() {
           onClose={() => setShowForm(false)}
           type={selectedInvoice ? "edit" : "create"} 
           initialData={selectedInvoice}
-          setInvoices={setInvoices} 
+          setInvoices={setInvoices}
         />
 
         {showDelete && (

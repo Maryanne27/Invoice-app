@@ -3,6 +3,9 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        spartan: ['"League Spartan"', 'sans-serif'],
+      },
       colors: {
         primary: "#7C5DFA",
         primaryHover: "#9277FF",

@@ -72,7 +72,7 @@ const InvoiceDetails = ({ invoice }) => {
 
       {/* Total Bar (Dark Section) */}
       <div className="bg-[#373B53] dark:bg-[#0C0E16] text-white p-6 md:px-8 rounded-b-lg flex items-center justify-between">
-        <span className="text-sm">Amount Due</span>
+        <span className="text-sm">Grand Total</span>
         <span className="text-2xl font-bold">£{(invoice.total || 0).toFixed(2)}</span>
       </div>
     </div>

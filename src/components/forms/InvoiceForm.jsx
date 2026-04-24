@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ArrowSideIcon } from "../../assets/icons";
+import BackButton from "../BackButton";
 
 
 const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
@@ -7,6 +8,7 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
   const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
+    id: "",
     clientName: "",
     clientEmail: "",
     description: "",
@@ -31,7 +33,28 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
   useEffect(() => {
     if (type === "edit" && initialData) {
       setItems(initialData.items || []);
-      setFormData(initialData);
+      setFormData({
+        id: initialData.id,
+        clientName: initialData?.clientName || "",
+        clientEmail: initialData?.clientEmail || "",
+        description: initialData?.description || "",
+        createdAt: initialData?.createdAt || "",
+        paymentTerms: initialData?.paymentTerms || 30,
+
+        senderAddress: {
+          street: initialData?.senderAddress?.street || "",
+          city: initialData?.senderAddress?.city || "",
+          postCode: initialData?.senderAddress?.postCode || "",
+          country: initialData?.senderAddress?.country || "",
+        },
+
+        clientAddress: {
+          street: initialData?.clientAddress?.street || "",
+          city: initialData?.clientAddress?.city || "",
+          postCode: initialData?.clientAddress?.postCode || "",
+          country: initialData?.clientAddress?.country || "",
+        },
+      });
     } else {
       setItems([]);
       setFormData({
@@ -56,13 +79,8 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
   const validate = () => {
     let newErrors = {};
 
-    if (!formData.clientName.trim()) newErrors.clientName = "Required";
-    if (!formData.clientEmail.trim()) newErrors.clientEmail = "Required";
-    if (!/\S+@\S+\.\S+/.test(formData.clientEmail))
-      newErrors.clientEmail = "Invalid email";
-
-    if (!formData.createdAt) newErrors.createdAt = "Required";
-    if (!formData.description.trim()) newErrors.description = "Required";
+    if (!formData.clientName?.trim()) newErrors.clientName = "Required";
+    if (!formData.clientEmail?.trim()) newErrors.clientEmail = "Required";
 
     if (items.length === 0) newErrors.items = "Add at least one item";
 
@@ -82,48 +100,18 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
   const deleteItem = (index) =>
     setItems(items.filter((_, i) => i !== index));
 
-  // const handleSave = (status) => {
-  //   if (status !== "draft" && !validate()) return;
-
-  //   const id =
-  //     type === "edit"
-  //       ? initialData.id
-  //       : `RT${Date.now().toString().slice(-6)}`;
-
-  //   const finalInvoice = {
-  //     ...formData,
-  //     id,
-  //     status,
-  //     paymentDue: calculateDueDate(),
-  //     items,
-  //     total: items.reduce(
-  //       (acc, item) => acc + item.price * item.quantity,
-  //       0
-  //     ),
-  //   };
-
-  //   setInvoices((prev) =>
-  //     type === "edit"
-  //       ? prev.map((inv) => (inv.id === id ? finalInvoice : inv))
-  //       : [finalInvoice, ...prev]
-  //   );
-
-  //   onClose();
-  // };
-
   const handleSave = (status) => {
     if (status !== "draft" && !validate()) return;
-  
-    const id =
-      type === "edit"
-        ? initialData.id
-        : `RT${Date.now().toString().slice(-6)}`;
-  
+
+    // console.log(setInvoices);
+
+    const id = formData.id;
+
     const finalInvoice = {
       ...formData,
       id,
       status,
-      paymentDue: calculateDueDate() || "", 
+      paymentDue: calculateDueDate() || "",
       items: items.map(item => ({
         ...item,
         quantity: Number(item.quantity) || 0,
@@ -135,13 +123,13 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
         0
       ),
     };
-  
+
     setInvoices((prev) =>
       type === "edit"
-        ? prev.map((inv) => (inv.id === id ? finalInvoice : inv))
+        ? prev.map((inv) => (inv.id === formData.id ? finalInvoice : inv))
         : [finalInvoice, ...prev]
     );
-  
+
     onClose();
   };
 
@@ -152,13 +140,7 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
       <div className="relative h-full w-full max-w-[720px] bg-white dark:bg-[#141625] overflow-y-auto p-8 md:p-14 lg:ml-[103px]">
-
-      
-        <button onClick={onClose} className="mb-6 text-sm text-textSecondary flex items-center gap-3 font-bold ">
-         <ArrowSideIcon /> 
-         <span> Go back</span>
-        
-        </button>
+      <BackButton />
 
         <h1 className="text-2xl font-bold mb-10 dark:text-white">
           {type === "edit" ? `Edit #${initialData?.id}` : "New Invoice"}
@@ -175,7 +157,7 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
                 key={field}
                 placeholder={field}
                 className="input-field mb-3"
-                value={formData.senderAddress[field]}
+                value={formData.senderAddress?.[field] || ""}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
@@ -216,7 +198,7 @@ const InvoiceForm = ({ isOpen, onClose, type, initialData, setInvoices }) => {
                 key={field}
                 placeholder={field}
                 className="input-field mb-3"
-                value={formData.clientAddress[field]}
+                value={formData.clientAddress?.[field] || ""}
                 onChange={(e) =>
                   setFormData({
                     ...formData,

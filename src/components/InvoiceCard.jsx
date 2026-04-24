@@ -13,40 +13,35 @@ function InvoiceCard({ invoice }) {
         border border-transparent 
         hover:border-primary 
         transition-all cursor-pointer
-        flex flex-col md:flex-row md:items-center md:justify-between md:px-8
+        grid grid-cols-2 md:grid-cols-[80px_1fr_auto_auto_auto_20px] 
+        items-center gap-y-2 md:gap-x-8 md:px-8
       "
       onClick={() => navigate(`/invoice/${invoice.id}`)}
     >
-      <div className="flex justify-between items-center md:gap-12 w-full md:w-auto">
-        <span className="font-bold text-textPrimary dark:text-white uppercase">
-          <span className="text-textSecondary">#</span>
-          {invoice.id}
-        </span>
+      <span className="col-start-1 font-bold text-textPrimary dark:text-white uppercase text-sm md:text-base">
+        <span className="text-textSecondary">#</span>
+        {invoice.id}
+      </span>
 
-        {/* mobile client */}
-        <span className="text-textSecondary md:hidden">
-          {invoice.clientName}
-        </span>
-      </div>
+      <span className="col-start-2 text-right md:text-left text-textSecondary dark:text-white text-sm md:col-start-auto">
+        {invoice.clientName}
+      </span>
 
-      <div className="flex justify-between items-center mt-4 md:mt-0 md:flex-1 md:justify-end md:gap-10 w-full">
-        <span className="text-textSecondary text-sm">
-          Due {invoice.paymentDue}
-        </span>
+      <span className="col-start-1 text-textSecondary text-sm md:col-start-auto">
+        Due {invoice.paymentDue}
+      </span>
 
-        <span className="font-bold text-textPrimary dark:text-white">
-          £{invoice.total.toLocaleString()}
-        </span>
+      <span className="col-start-1 font-bold text-textPrimary dark:text-white text-lg md:col-start-auto md:text-base">
+        £{invoice.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+      </span>
 
-        {/* desktop client */}
-        <span className="hidden md:block text-textSecondary w-[120px]">
-          {invoice.clientName}
-        </span>
-
+      <div className="col-start-2 row-start-2 row-span-3 flex justify-end items-center md:row-auto md:col-start-auto md:row-span-1">
         <StatusBadge status={invoice.status} />
-
-        <span className="hidden md:block text-primary text-xl">›</span>
       </div>
+
+      <span className="hidden md:block text-primary text-xl font-bold text-right">
+        ›
+      </span>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import InvoiceForm from "../components/forms/InvoiceForm";
 import MobileActionBar from "../components/invoice-view/MobileActionBar";
 import InvoiceDetails from "../components/invoice-view/InvoiceDetails";
 import StatusHeader from "../components/invoice-view/StatusHeader";
+import BackButton from "../components/BackButton";
 
 function InvoiceView({ invoices, setInvoices }) {
   const { id } = useParams();
@@ -37,6 +38,7 @@ function InvoiceView({ invoices, setInvoices }) {
   return (
     <>
       <div className="pb-32 md:pb-12">
+        <BackButton />
         <StatusHeader 
           status={invoice.status} 
           onEdit={handleEdit} 
@@ -62,11 +64,12 @@ function InvoiceView({ invoices, setInvoices }) {
 
       {isEditFormOpen && (
         <InvoiceForm
-          isOpen={isEditFormOpen} 
-          onClose={() => setIsEditFormOpen(false)} 
-          type="edit"
-          initialData={invoice}
-        />
+        isOpen={isEditFormOpen}
+        onClose={() => setIsEditFormOpen(false)}
+        type="edit"
+        initialData={invoice}
+        setInvoices={setInvoices}
+      />
       )}
     </>
   );
